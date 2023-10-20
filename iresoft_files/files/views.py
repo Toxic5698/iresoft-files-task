@@ -11,7 +11,10 @@ from ninja.pagination import paginate, PageNumberPagination
 
 from .models import SavedFile
 
-api = NinjaAPI()
+api = NinjaAPI(
+    title="iresoft files task",
+    description="docs available here: https://github.com/Toxic5698/iresoft-files-task"
+)
 
 
 class FileSchemaOut(Schema):
@@ -29,12 +32,7 @@ class FileSchemaFilter(FilterSchema):
     added_at: Optional[datetime.datetime]
 
 
-@api.get("")
-def get_openapi_schema(request):
-    return redirect("docs#/")
-
-
-@api.get("list/", response=List[FileSchemaOut])
+@api.get("", response=List[FileSchemaOut])
 @paginate(PageNumberPagination)
 def files_list(request, filters: FileSchemaFilter = Query(...), **kwargs):
     queryset = SavedFile.objects.all()

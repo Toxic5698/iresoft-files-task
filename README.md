@@ -55,7 +55,7 @@ Spusťte lokální vývojový server, který umožňuje testovat aplikaci na va�
 python manage.py runserver
 ```
 Aplikace by nyní měla být přístupná na http://127.0.0.1:8000/ ve vašem webovém prohlížeči.
-Zobrazí se openapi schema s dostupnými endpointy.
+OpenAPI schema dostupné z endpointu http://127.0.0.1:8000/docs#/.
 
 ## Krok 7: Spuštění testů (volitelný)
 Spusťte automatické testy aplikace.
@@ -65,7 +65,7 @@ python manage.py test
 ```
 
 # Endpointy:
-1. **GET /list/**: Získání seznamu souborů.
+1. **GET /**: Získání seznamu souborů.
    - **Response:** Seznam souborů s následujícími atributy:
      - `id` (int): Unikátní identifikátor souboru.
      - `file_name` (str): Název souboru.
