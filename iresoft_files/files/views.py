@@ -1,17 +1,15 @@
 import datetime
-
-from django.http import FileResponse
-from django.shortcuts import get_object_or_404
-from ninja import NinjaAPI, Schema, File, FilterSchema, Query
-from ninja.pagination import paginate, PageNumberPagination
-from ninja.files import UploadedFile
+from statistics import median
 from typing import List, Optional
 
+from django.http import FileResponse
+from django.shortcuts import get_object_or_404, redirect
+from hurry.filesize import size
+from ninja import NinjaAPI, Schema, File, FilterSchema, Query
+from ninja.files import UploadedFile
+from ninja.pagination import paginate, PageNumberPagination
+
 from .models import SavedFile
-
-from django.core.files.storage import FileSystemStorage
-
-STORAGE = FileSystemStorage()
 
 api = NinjaAPI()
 
@@ -31,23 +29,27 @@ class FileSchemaFilter(FilterSchema):
     added_at: Optional[datetime.datetime]
 
 
-@api.get("/", response=List[FileSchemaOut])
-@paginate
+@api.get("")
+def get_openapi_schema(request):
+    return redirect("docs#/")
+
+
+@api.get("list/", response=List[FileSchemaOut])
+@paginate(PageNumberPagination)
 def files_list(request, filters: FileSchemaFilter = Query(...), **kwargs):
     queryset = SavedFile.objects.all()
     files = filters.filter(queryset)
-    return files
+    return list(files)
 
 
-@api.get("/{file_id}")
+@api.get("download/{file_id}")
 def download_file(request, file_id: int):
     file = get_object_or_404(SavedFile, id=file_id)
-    filename = file.file.path
-    response = FileResponse(open(filename, 'rb'))
+    response = FileResponse(open(file.file.path, 'rb'))
     return response
 
 
-@api.post("")
+@api.post("upload")
 def upload_file(request, file: UploadedFile = File(...)):
     new_file = SavedFile.objects.create(
         file_name=file.name,
@@ -58,20 +60,22 @@ def upload_file(request, file: UploadedFile = File(...)):
     return {'successfully_uploaded': new_file.file_name}
 
 
-@api.delete("/{file_id}")
+@api.delete("delete/{file_id}")
 def delete_file(request, file_id: int):
     file = get_object_or_404(SavedFile, id=file_id)
     file.delete()
     return {"successfully_deleted": file.file_name}
 
-@api.get("/stats")
+
+@api.get("stats/")
 def get_stats(request):
-    all_files = SavedFile.objects.all()
-    all_sizes = all_files.values("file_size")
+    all_sizes = list(SavedFile.objects.all().values_list("file_size", flat=True))
     stats = {
-        # "total_size":
-        # "average_size":
-        # "median_size":
-        "files_count": all_files.count()
+        "files_count": len(all_sizes),
+        "total_size": size(sum(all_sizes)),
+        "average_size": size(sum(all_sizes) / len(all_sizes)),
+        "median_size": size(median(all_sizes)),
+        "biggest_file": size(max(all_sizes)),
+        "smallest_file": size(min(all_sizes))
     }
     return stats
