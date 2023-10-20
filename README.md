@@ -12,13 +12,13 @@ Předtím než začnete s instalací, ujistěte se, že na vašem počítači js
 Stáhněte zdrojový kód aplikace z repozitáře nebo zkopírujte jej na váš lokální počítač.
 
 ```bash
-git clone https://github.com/jmeno/aplikace.git
+git clone https://github.com/Toxic5698/iresoft-files-task.git
 ```
 
 ## Krok 2: Vytvořte virtuální prostředí
 Pro izolaci závislostí a balíčků aplikace doporučujeme vytvoření virtuálního prostředí. Přejděte do složky aplikace a vytvořte virtuální prostředí.
 ```bash
-cd aplikace/
+cd iresoft-files-task/
 python -m venv venv
 ```
 
@@ -49,7 +49,7 @@ python manage.py makemigrations
 python manage.py migrate
 ```
 ## Krok 6: Spusťte lokální server
-Spusťte lokální vývojový server, který umožňuje testovat vaši aplikaci na vašem počítači.
+Spusťte lokální vývojový server, který umožňuje testovat aplikaci na vašem počítači.
 
 ```bash
 python manage.py runserver
