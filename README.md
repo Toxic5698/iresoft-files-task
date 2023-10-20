@@ -57,6 +57,13 @@ python manage.py runserver
 Aplikace by nyní měla být přístupná na http://127.0.0.1:8000/ ve vašem webovém prohlížeči.
 Zobrazí se openapi schema s dostupnými endpointy.
 
+## Krok 7: Spuštění testů (volitelný)
+Spusťte automatické testy aplikace.
+
+```bash
+python manage.py test
+```
+
 # Endpointy:
 1. **GET /list/**: Získání seznamu souborů.
    - **Response:** Seznam souborů s následujícími atributy:
@@ -81,8 +88,8 @@ Zobrazí se openapi schema s dostupnými endpointy.
    - **Response:** Statistiky obsahují:
      - `files_count` (int): Celkový počet souborů.
      - `total_size` (str): Celková velikost všech souborů v čitelném formátu.
-     - `average_size` (str): Průměrná velikost souboru v čitelném formátu.
+     - `average_size` (str): Průměrná velikost souborů v čitelném formátu.
      - `median_size` (str): Medián velikosti souborů v čitelném formátu.
-     - `biggest_file` (str): Největší soubor v čitelném formátu.
-     - `smallest_file` (str): Nejmenší soubor v čitelném formátu.
+     - `biggest_file` (str): Velikost největšího souboru v čitelném formátu.
+     - `smallest_file` (str): Velikost nejmenšího souboru v čitelném formátu.
 
